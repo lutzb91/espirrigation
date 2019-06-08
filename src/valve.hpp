@@ -6,4 +6,5 @@ class Valve {
     public:
         void open();
         void close();
+        bool isOpen();
 };
