@@ -21,7 +21,7 @@ Valve valves[NUM_VALVES];
 bool valveOpenHandler(const HomieRange& range, const String& value) {
   if (value != "true" && value != "false") return false;
 
-  Homie.getLogger() << "Valve " << range << " changed to " << (value ? "open":"close") << endl;
+  Homie.getLogger() << "Valve " << range.index << " changed to " << (value ? "open":"close") << endl;
   bool open = (value == "true");
   
   if(open) {

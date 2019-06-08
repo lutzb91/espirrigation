@@ -2,7 +2,7 @@
 
 class Valve {
     private:
-        bool open = false;
+        bool open_ = false;
     public:
         void open();
         void close();
