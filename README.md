@@ -1,6 +1,8 @@
 EspIrrigation
 =============
 
+[![Build Status](https://travis-ci.org/lutzb91/espirrigation.svg?branch=master)](https://travis-ci.org/lutzb91/espirrigation)
+
 Architecture
 ------------
 The following image shows the internal Architecture of espirrigation.
