@@ -26,11 +26,15 @@ bool valveOpenHandler(const HomieRange& range, const String& value) {
     controller.closeValve(range.index);
   }
 
-  valveNode.setProperty("open").setRange(range).send(value);
   return true;
 }
 
+void valveChanged(int num, Valve& valve) {
+  valveNode.setProperty("open").setRange(num).send(valve.isOpen() ? "true" : "false");
+}
+
 void setupHandler() {
+  controller.setChangedHandler(valveChanged);
   controller.init();
 }
 
@@ -39,8 +43,9 @@ void loopHandler() {
 }
 
 void setup() {
-  Serial.begin(9600);
+  Serial.begin(115200);
   Serial << endl << endl;
+  WiFi.disconnect();
   pinMode(PIN_RELAY, OUTPUT);
   digitalWrite(PIN_RELAY, LOW);
 
