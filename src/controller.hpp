@@ -16,6 +16,7 @@ class Controller {
         uint16_t valves_bitfield_ = 0;
         uint16_t valves_bitfield_old_ = 1; // set different, so that shift out is called at startup
         void (*_callback)(int num, Valve& valve) = NULL;
+        void (*_durationCallback)(int num, Valve& valve) = NULL;
 
         void timerFinished(Timer *timer);
     public:
@@ -25,13 +26,18 @@ class Controller {
             _num_valves = num_valves;
         }
         void init(int dataPin = 12, int loadPin = 13, int clockPin = 15);
-        void openValve(uint8_t index, uint16_t seconds);
+        void openValve(uint8_t index);
         void closeValve(uint8_t index);
+        void setValveDuration(uint8_t index, uint16_t seconds);
         void updateRegisters();
         void loop();
 
         void setChangedHandler(void (*callback)(int num, Valve& valve)) {
             _callback = callback;
+        }
+
+        void setDurationHandler(void (*callback)(int num, Valve& valve)) {
+            _durationCallback = callback;
         }
         
 };

@@ -17,24 +17,44 @@ Controller controller(NUM_VALVES);
 bool valveOpenHandler(const HomieRange& range, const String& value) {
   if (value != "true" && value != "false") return false;
 
-  Homie.getLogger() << "Valve " << range.index << " changed to " << (value ? "open":"close") << endl;
-  bool open = (value == "true");
-  
-  if(open) {
-    controller.openValve(range.index, 10);
+  if(value == "true") {
+    controller.openValve(range.index-1);
   } else {
-    controller.closeValve(range.index);
+    controller.closeValve(range.index-1);
   }
 
   return true;
 }
 
+bool valveDurationHandler(const HomieRange& range, const String& value) {
+  //check if all characters are digits
+  for(int i=0;i<value.length();i++) {
+    if(!isDigit(value.charAt(i))) {
+      return false;
+    }
+  }
+  int duration = value.toInt();
+  controller.setValveDuration(range.index-1, duration);
+  return true;
+}
+
+bool valveOrderHandler(const HomieRange& range, const String& value) {
+
+}
+
 void valveChanged(int num, Valve& valve) {
-  valveNode.setProperty("open").setRange(num).send(valve.isOpen() ? "true" : "false");
+  Homie.getLogger() << "Valve " << num << " changed to " << (valve.isOpen() ? "open":"close") << endl;
+  valveNode.setProperty("open").setRange(num+1).send(valve.isOpen() ? "true" : "false");
+}
+
+void durationChanged(int num, Valve& valve) {
+  Homie.getLogger() << "Duration of valve " << num << " changed to " << valve.getDuration() << " seconds" << endl;
+  valveNode.setProperty("duration").setRange(num+1).send(String(valve.getDuration()));
 }
 
 void setupHandler() {
   controller.setChangedHandler(valveChanged);
+  controller.setDurationHandler(durationChanged);
   controller.init();
 }
 
@@ -52,7 +72,9 @@ void setup() {
   Homie_setBrand("EspIrrigation");
   Homie_setFirmware("espirrigation", "0.0.1");
 
-  valveNode.advertiseRange("open", 0, 15).settable(valveOpenHandler);
+  valveNode.advertiseRange("open", 1, NUM_VALVES).settable(valveOpenHandler);
+  valveNode.advertiseRange("duration", 1, NUM_VALVES).settable(valveDurationHandler);
+  valveNode.advertiseRange("order", 1, NUM_VALVES).settable(valveOrderHandler);
 
   Homie.setSetupFunction(setupHandler);
   Homie.setLoopFunction(loopHandler);

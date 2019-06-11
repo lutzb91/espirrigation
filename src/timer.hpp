@@ -5,7 +5,7 @@
 class Timer {
     private:
         unsigned long _last_millis = 0;
-        uint32_t _timer_millis = 0;
+        int32_t _timer_millis = 0;
         bool _running = false;
         std::function<void(Timer*)> _callback = NULL;
     public:

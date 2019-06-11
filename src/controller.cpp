@@ -36,9 +36,9 @@ void Controller::updateRegisters() {
     }
 }
 
-void Controller::openValve(uint8_t index, uint16_t seconds) {
+void Controller::openValve(uint8_t index) {
     _valves[index].open();
-    _timers[index].startTimer(seconds);
+    _timers[index].startTimer(_valves[index].getDuration());
     if(_callback != NULL) {
         _callback(index, _valves[index]);
     }
@@ -49,6 +49,13 @@ void Controller::closeValve(uint8_t index){
     _valves[index].close();
     if(_callback != NULL) {
         _callback(index, _valves[index]);
+    }
+}
+
+void Controller::setValveDuration(uint8_t index, uint16_t seconds) {
+    _valves[index].setDuration(seconds);
+    if(_durationCallback != NULL) {
+        _durationCallback(index, _valves[index]);
     }
 }
 
