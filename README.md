@@ -2,6 +2,9 @@
 
 [![Build Status](https://travis-ci.org/lutzb91/espirrigation.svg?branch=master)](https://travis-ci.org/lutzb91/espirrigation)
 
+## Description
+EspIrrigation is a irrigation controller based on the [Homie-Framework](https://github.com/homieiot/homie-esp8266). It can control up to 16 valves in either auto or manual mode. In manual mode the valves can be opened individually and in auto mode the valves open in a specific order. The durations of each valve can be programmed and are also available after power loss as they are stored in the EEPROM of the ESP8266.
+
 ## Nodes
 EspIrrigation provides the following nodes as ranges from `1` to `NUM_VALVES`. `n` is the corresponding valve.
 
